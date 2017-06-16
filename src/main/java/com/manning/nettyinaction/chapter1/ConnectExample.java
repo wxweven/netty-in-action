@@ -20,19 +20,15 @@ public class ConnectExample {
         // Does not block
         ChannelFuture future = channel.connect(
                 new InetSocketAddress("192.168.0.1", 25));
-        future.addListener(new ChannelFutureListener() {
-        @Override
-        public void operationComplete(ChannelFuture future) {
-            if (future.isSuccess()) {
+        future.addListener((ChannelFutureListener) future1 -> {
+            if (future1.isSuccess()) {
                 ByteBuf buffer = Unpooled.copiedBuffer(
                         "Hello", Charset.defaultCharset());
-                ChannelFuture wf = future.channel().writeAndFlush(buffer);
-                // ...
+                ChannelFuture wf = future1.channel().writeAndFlush(buffer);
             } else {
-                Throwable cause = future.cause();
+                Throwable cause = future1.cause();
                 cause.printStackTrace();
             }
-        }
         });
 
     }
